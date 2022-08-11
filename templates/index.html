@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SMS Spam Filter</title>
+    <link
+      rel="shortcut icon"
+      href="../static/favicon.png"
+      type="image/x-icon"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&family=Righteous&family=Roboto+Mono:wght@300;400;500;600&family=Roboto:wght@400;500;700&family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgb(155, 155, 155);
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgb(110, 110, 110);
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: rgb(247, 247, 247);
+      }
+      .container {
+        width: 100%;
+      }
+      .header {
+        padding: 15px 0;
+        background: white;
+        color: black;
+        text-align: center;
+        font-family: Righteous;
+        font-size: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px -4px 24px -1px rgba(0, 0, 0, 0.2);
+      }
+      .header span {
+        margin-right: 5px;
+        font-size: 30px;
+        color: rgb(66, 133, 244);
+      }
+      .body {
+        width: 100%;
+        height: fit-content;
+      }
+      .main {
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgb(66, 133, 244);
+        padding: 100px 0;
+        flex-direction: column;
+        padding-bottom: 100px;
+      }
+      .main .title {
+        width: 550px;
+        font-size: 35px;
+        font-family: poppins;
+        color: white;
+        text-align: center;
+        font-weight: 500;
+      }
+      .main #message {
+        width: 600px;
+        height: 90px;
+        font-size: medium;
+        font-family: poppins;
+        outline: none;
+        border: none;
+        border-radius: 5mm;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.285);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.037);
+        resize: none;
+        border-bottom-left-radius: 0mm;
+      }
+      .main #message::placeholder {
+        color: white;
+      }
+      .main #message:focus {
+        background: white;
+        color: rgb(51, 51, 51);
+      }
+      .main #message:focus::placeholder {
+        color: rgb(51, 51, 51);
+      }
+      .main button {
+        font-size: large;
+        font-family: poppins;
+        padding: 7px 20px;
+        background: white;
+        color: rgb(6, 101, 196);
+        outline: none;
+        border: none;
+        border-radius: 6mm;
+        margin-top: 30px;
+        font-weight: 500;
+        cursor: pointer;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.037);
+        display: flex;
+        align-items: center;
+      }
+      .main button span {
+        margin-left: 5px;
+        transition: 0.25s;
+      }
+      form {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+      .main button:hover {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.37);
+      }
+      .main button:hover span {
+        transform: translateX(5px);
+      }
+      .prediction {
+        margin: 50px auto;
+        width: 80%;
+        background: white;
+        box-shadow: -1px 1px 7px rgba(0, 0, 0, 0.15);
+        min-height: 230px;
+        padding: 20px;
+        font-family: poppins;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: fit-content;
+        text-align: justify;
+        border-radius: 10mm;
+        border-bottom-left-radius: 0mm;
+      }
+      .flip {
+        flex-direction: row-reverse;
+        border-bottom-right-radius: 0mm;
+        border-bottom-left-radius: 10mm;
+        box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.15);
+      }
+      .cname {
+        width: 100%;
+        font-size: x-large;
+        font-weight: 500;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+      }
+      .cname span {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        background: rgb(46, 116, 228);
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        margin-right: 5px;
+      }
+      .pcontent {
+        width: 100%;
+        flex-basis: 55%;
+      }
+      .desc {
+        font-size: medium;
+      }
+      .Classification {
+        flex-basis: 40%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-evenly;
+        border: 0.5mm solid black;
+        border-radius: 2mm;
+        padding: 10px;
+      }
+      .subtitle {
+        align-self: flex-start;
+        font-size: medium;
+        font-weight: 600;
+        color: rgb(6, 101, 196);
+      }
+      .answer span {
+        font-size: 129px;
+      }
+      .green {
+        color: rgb(81, 218, 133);
+      }
+      .red {
+        color: rgb(255, 94, 94);
+      }
+      .heading2 {
+        width: 100%;
+        text-align: center;
+        font-size: x-large;
+        font-family: poppins;
+        font-weight: 400;
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgb(46, 46, 46);
+      }
+      .correct {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        font-family: poppins;
+        margin-left: 30px;
+        font-size: larger;
+      }
+      .progress {
+        width: 250px;
+        height: 10px;
+        position: relative;
+        background: rgba(0, 0, 0, 0.155);
+        border-radius: 1mm;
+        overflow: hidden;
+        margin-right: 5px;
+        margin-bottom: 10px;
+        border: 0.4mm solid rgb(46, 46, 46);
+      }
+      .progress-fill,
+      .progress-fill2 {
+        height: 100%;
+        background: rgb(81, 218, 133);
+        transition: 0.25s;
+        border: 0.35mm solid rgb(81, 218, 133);
+      }
+      .progress-fill2 {
+        background: rgb(255, 94, 94);
+        border: 0.35mm solid rgb(255, 94, 94);
+      }
+      .icon {
+        color: rgb(101, 101, 101);
+        font-size: xx-large;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <span class="material-icons-round"> chat </span>SMS Spam Filter
+      </div>
+      <div class="body">
+        <div class="main">
+          <div class="title">Check whether the message is</div>
+          <div class="title" style="margin-bottom: 50px">Spam or Ham</div>
+          <form action="{{url_for('home')}}" method="post">
+            <textarea
+              name="message"
+              id="message"
+              placeholder="Enter your message here"
+              required
+              minlength="30"
+            ></textarea>
+            <button type="submit">
+              Check<span class="material-icons-round"> east </span>
+            </button>
+          </form>
+        </div>
+        <div class="results">
+          <div class="heading2">
+            <span class="material-icons"> rocket_launch </span>Results
+          </div>
+          {%if data %}
+          <div class="correct">
+            <span class="material-icons icon"> thumb_up_alt </span>
+            <div class="progress">
+              <div class="progress-fill"></div>
+            </div>
+            <div class="values"></div>
+          </div>
+
+          <div class="correct">
+            <span class="material-icons icon"> dangerous </span>
+            <div class="progress">
+              <div class="progress-fill2"></div>
+            </div>
+            <div class="values"></div>
+          </div>
+
+          <script>
+            var c1 = 0;
+            var c2 = 0;
+            ("{% for i in data%}");
+            ("{% if i[1]==0%}");
+            c1 = c1 + 1;
+            ("{%else%}");
+            c2 = c2 + 1;
+            ("{%endif%}");
+            ("{%endfor%}");
+            document.querySelector(".progress-fill").style.width =
+              (c1 / 12) * 100 + "%";
+            document.querySelector(".progress-fill2").style.width =
+              (c2 / 12) * 100 + "%";
+            values = document.querySelectorAll(".values");
+            values[0].innerHTML = c1;
+            values[1].innerHTML = c2;
+          </script>
+
+          <div class="prediction">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[0][0]}}
+              </div>
+              <div class="desc">
+                MLPClassifier trains iteratively since at each time step the
+                partial derivatives of the loss function with respect to the
+                model parameters are computed to update the parameters. It can
+                also have a regularization term added to the loss function that
+                shrinks model parameters to prevent overfitting. This
+                implementation works with data represented as dense numpy arrays
+                or sparse scipy arrays of floating point values.
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[0][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[0][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------Logistic Regression--------------------->
+
+          <div class="prediction flip">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[1][0]}}
+              </div>
+              <div class="desc">
+                Logistic regression estimates the probability of an event
+                occurring, such as voted or didn’t vote, based on a given
+                dataset of independent variables. Since the outcome is a
+                probability, the dependent variable is bounded between 0 and 1.
+                In logistic regression, a logit transformation is applied on the
+                odds—that is, the probability of success divided by the
+                probability of failure.
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[1][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[1][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------ExtraTrees Classifier--------------------->
+
+          <div class="prediction">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[2][0]}}
+              </div>
+              <div class="desc">
+                Extremely Randomized Trees Classifier(Extra Trees Classifier) is
+                a type of ensemble learning technique which aggregates the
+                results of multiple de-correlated decision trees collected in a
+                “forest” to output it’s classification result. In concept, it is
+                very similar to a Random Forest Classifier and only differs from
+                it in the manner of construction of the decision trees in the
+                forest.
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[2][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[2][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------Decision Tree--------------------->
+
+          <div class="prediction flip">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[3][0]}}
+              </div>
+              <div class="desc">
+                A decision tree is a flowchart-like structure in which each
+                internal node represents a "test" on an attribute (e.g. whether
+                a coin flip comes up heads or tails), each branch represents the
+                outcome of the test, and each leaf node represents a class label
+                (decision taken after computing all attributes).
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[3][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[3][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------Random Forest--------------------->
+
+          <div class="prediction">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[4][0]}}
+              </div>
+              <div class="desc">
+                Random forests or random decision forests is an ensemble
+                learning method for classification, regression and other tasks
+                that operates by constructing a multitude of decision trees at
+                training time. For classification tasks, the output of the
+                random forest is the class selected by most trees
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[4][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[4][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------Naive Bayes--------------------->
+
+          <div class="prediction flip">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[5][0]}}
+              </div>
+              <div class="desc">
+                In statistics, naive Bayes classifiers are a family of simple
+                "probabilistic classifiers" based on applying Bayes' theorem
+                with strong (naive) independence assumptions between the
+                features (see Bayes classifier). They are among the simplest
+                Bayesian network models, but coupled with kernel density
+                estimation, they can achieve high accuracy levels.
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[5][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[5][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------K Neighbours--------------------->
+
+          <div class="prediction">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[6][0]}}
+              </div>
+              <div class="desc">
+                The k-nearest neighbors algorithm, also known as KNN or k-NN, is
+                a non-parametric, supervised learning classifier, which uses
+                proximity to make classifications or predictions about the
+                grouping of an individual data point. While it can be used for
+                either regression or classification problems, it is typically
+                used as a classification algorithm, working off the assumption
+                that similar points can be found near one another.
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[6][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[6][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------SVM--------------------->
+
+          <div class="prediction flip">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[7][0]}}
+              </div>
+              <div class="desc">
+                Support Vector Machine or SVM is one of the most popular
+                Supervised Learning algorithms, which is used for Classification
+                as well as Regression problems. However, primarily, it is used
+                for Classification problems in Machine Learning. The goal of the
+                SVM algorithm is to create the best line or decision boundary
+                that can segregate n-dimensional space into classes so that we
+                can easily put the new data point in the correct category in the
+                future. This best decision boundary is called a hyperplane.
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[7][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[7][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------ADA Boost--------------------->
+
+          <div class="prediction flip">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[8][0]}}
+              </div>
+              <div class="desc">
+                An AdaBoost classifier is a meta-estimator that begins by
+                fitting a classifier on the original dataset and then fits
+                additional copies of the classifier on the same dataset but
+                where the weights of incorrectly classified instances are
+                adjusted such that subsequent classifiers focus more on
+                difficult cases
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[8][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[8][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------Gradient Boost--------------------->
+
+          <div class="prediction">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[9][0]}}
+              </div>
+              <div class="desc">
+                An AdaBoost classifier is a meta-estimator that begins by
+                fitting a classifier on the original dataset and then fits
+                additional copies of the classifier on the same dataset but
+                where the weights of incorrectly classified instances are
+                adjusted such that subsequent classifiers focus more on
+                difficult cases
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[9][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[9][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------XG Boost--------------------->
+
+          <div class="prediction flip">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[10][0]}}
+              </div>
+              <div class="desc">
+                XGBoost is a popular and efficient open-source implementation of
+                the gradient boosted trees algorithm. Gradient boosting is a
+                supervised learning algorithm, which attempts to accurately
+                predict a target variable by combining the estimates of a set of
+                simpler, weaker models.XGBoost minimizes a regularized objective
+                function that combines a convex loss function and a penalty term
+                for model complexity.
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[10][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[10][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+
+          <!-------------------------Cat Boost--------------------->
+
+          <div class="prediction">
+            <div class="pcontent">
+              <div class="cname">
+                <span class="material-icons-outlined">
+                  precision_manufacturing </span
+                >{{data[11][0]}}
+              </div>
+              <div class="desc">
+                XGBoost is a popular and efficient open-source implementation of
+                the gradient boosted trees algorithm. Gradient boosting is a
+                supervised learning algorithm, which attempts to accurately
+                predict a target variable by combining the estimates of a set of
+                simpler, weaker models.XGBoost minimizes a regularized objective
+                function that combines a convex loss function and a penalty term
+                for model complexity.
+              </div>
+            </div>
+            <div class="Classification">
+              <div class="subtitle">Prediction</div>
+              {%if data[11][1]==0%}
+              <div class="answer">
+                <span class="material-icons green"> thumb_up_alt </span>
+              </div>
+              <div class="answer">Ham Message</div>
+              {%endif%} {%if data[11][1]==1%}
+              <div class="answer">
+                <span class="material-icons red"> dangerous </span>
+              </div>
+              <div class="answer">Spam Message</div>
+              {%endif%}
+            </div>
+          </div>
+          {%endif%}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
