@@ -31,7 +31,7 @@ def home():
     j=0
     for i in predictResult:
         if classifierList[j]=="Gradient Boosting Classifier":
-            TestResult((classifierList[j],1))
+            TestResult.append((classifierList[j],1))
             continue
         predictions = i.predict(xv)
         TestResult.append((classifierList[j],predictions[0]))       
