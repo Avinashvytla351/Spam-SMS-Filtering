@@ -60,7 +60,6 @@ X, y = np.asanyarray(sms['text']), np.asanyarray(sms['label_num'])
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1, random_state=24)
 len(X_train), len(X_test)
 trainList=list(X_train)
-trainListY=list(y_train)
 
 counter_vec = CountVectorizer().fit(X_train)
 X_train_vec, X_test_vec = counter_vec.transform(X_train), counter_vec.transform(X_test)
@@ -81,7 +80,7 @@ classifiers = [['Neural Network :', MLPClassifier(max_iter = 2000)],
 predictions_df = pd.DataFrame()
 predictions_df['action'] = y_test
 
-predictList = [trainList,trainListY]
+predictList = [trainList]
 for name,classifier in classifiers:
     classifier = classifier
     predictList.append(classifier.fit(X_train_vec, y_train))
