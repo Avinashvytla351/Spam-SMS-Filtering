@@ -23,6 +23,7 @@
     <style>
       html {
         scroll-behavior: smooth;
+        overflow-x: hidden;
       }
       ::-webkit-scrollbar {
         width: 10px;
@@ -42,6 +43,8 @@
         margin: 0;
         padding: 0;
         background: rgb(247, 247, 247);
+        overflow-x: hidden;
+        width: 100%;
       }
       .container {
         width: 100%;
@@ -93,7 +96,7 @@
         font-family: poppins;
         outline: none;
         border: none;
-        border-radius: 5mm;
+        border-radius: 10mm;
         padding: 10px 20px;
         background: rgba(255, 255, 255, 0.285);
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.037);
@@ -109,6 +112,9 @@
       }
       .main #message:focus::placeholder {
         color: rgb(51, 51, 51);
+      }
+      .main #message:not(:focus) {
+        color: white;
       }
       .main button {
         font-size: large;
@@ -142,6 +148,7 @@
         transform: translateX(5px);
       }
       .prediction {
+        flex-wrap: wrap;
         margin: 50px auto;
         width: 80%;
         background: white;
@@ -154,14 +161,18 @@
         justify-content: space-between;
         height: fit-content;
         text-align: justify;
-        border-radius: 10mm;
+        border-radius: 15mm;
         border-bottom-left-radius: 0mm;
+        transform: translateX(-50px);
+        transition: 0.5s ease-in-out;
+        opacity: 0;
       }
       .flip {
         flex-direction: row-reverse;
         border-bottom-right-radius: 0mm;
-        border-bottom-left-radius: 10mm;
+        border-bottom-left-radius: 15mm;
         box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.15);
+        transform: translateX(50px);
       }
       .cname {
         width: 100%;
@@ -227,23 +238,30 @@
         color: rgb(46, 46, 46);
       }
       .correct {
+        width: fit-content;
         display: flex;
-        align-items: flex-end;
-        justify-content: flex-start;
+        align-items: flex-start;
+        justify-content: space-evenly;
+        flex-direction: column;
         font-family: poppins;
-        margin-left: 30px;
         font-size: larger;
+        background: white;
+        padding: 10px;
+        border-radius: 2mm;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
       }
       .progress {
         width: 250px;
-        height: 10px;
+        height: 7px;
         position: relative;
-        background: rgba(0, 0, 0, 0.155);
+        background: rgb(255, 255, 255);
         border-radius: 1mm;
         overflow: hidden;
         margin-right: 5px;
         margin-bottom: 10px;
         border: 0.4mm solid rgb(46, 46, 46);
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
       }
       .progress-fill,
       .progress-fill2 {
@@ -256,9 +274,91 @@
         background: rgb(255, 94, 94);
         border: 0.35mm solid rgb(255, 94, 94);
       }
-      .icon {
-        color: rgb(101, 101, 101);
-        font-size: xx-large;
+      .progress-text {
+        width: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: medium;
+      }
+      .values {
+        font-weight: bold;
+      }
+      .show {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      .results1 {
+        width: 90%;
+        margin: auto;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-evenly;
+        height: fit-content;
+        position: relative;
+        margin-top: 30px;
+      }
+      .corrects {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-right: 30px;
+      }
+      .label-top {
+        font-size: 15px;
+        font-weight: 600;
+        font-family: poppins;
+        margin-bottom: 5px;
+      }
+      .data-set-accuracies {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .blocks {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+      }
+      .block {
+        width: 65px;
+        height: 65px;
+        background: rgb(255, 255, 255);
+        color: rgb(36, 36, 36);
+        margin: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-direction: column;
+        font-family: poppins;
+        font-weight: 600;
+        border-radius: 1mm;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+      }
+      .block-title {
+        font-weight: 400;
+      }
+      @media screen and (max-width: 800px) {
+        .main #message {
+          width: 85vw;
+        }
+        .main .title {
+          width: 90vw;
+          font-size: 30px;
+        }
+        .pcontent {
+          flex-basis: 100%;
+        }
+        .Classification {
+          flex-basis: 100%;
+        }
+        .results1 {
+          flex-wrap: wrap;
+        }
       }
     </style>
   </head>
@@ -289,22 +389,84 @@
             <span class="material-icons"> rocket_launch </span>Results
           </div>
           {%if data %}
-          <div class="correct">
-            <span class="material-icons icon"> thumb_up_alt </span>
-            <div class="progress">
-              <div class="progress-fill"></div>
-            </div>
-            <div class="values"></div>
-          </div>
+          <div class="results1">
+            <div class="corrects">
+              <div class="label-top">Prediction Count</div>
+              <div class="correct">
+                <div class="progress-text">
+                  <span>Ham</span>
+                  <div class="values"></div>
+                </div>
+                <div class="progress">
+                  <div class="progress-fill"></div>
+                </div>
+              </div>
 
-          <div class="correct">
-            <span class="material-icons icon"> dangerous </span>
-            <div class="progress">
-              <div class="progress-fill2"></div>
+              <div class="correct">
+                <div class="progress-text">
+                  <span>Spam</span>
+                  <div class="values"></div>
+                </div>
+                <div class="progress">
+                  <div class="progress-fill2"></div>
+                </div>
+              </div>
             </div>
-            <div class="values"></div>
-          </div>
 
+            <div class="data-set-accuracies">
+              <div class="label-top">Data-Set Accuracies</div>
+              <div class="blocks">
+                <div class="block">
+                  <div class="block-title">MLP/NN</div>
+                  <div class="block-body">98.3</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">LR</div>
+                  <div class="block-body">97.8</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">ET</div>
+                  <div class="block-body">97.6</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">DT</div>
+                  <div class="block-body">96.1</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">RF</div>
+                  <div class="block-body">96.7</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">NB</div>
+                  <div class="block-body">98.1</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">KNN</div>
+                  <div class="block-body">89.3</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">SVM</div>
+                  <div class="block-body">97.6</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">ADA</div>
+                  <div class="block-body">96.4</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">GB</div>
+                  <div class="block-body">96.0</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">XGB</div>
+                  <div class="block-body">97.5</div>
+                </div>
+                <div class="block">
+                  <div class="block-title">Cat</div>
+                  <div class="block-body">97.1</div>
+                </div>
+              </div>
+            </div>
+          </div>
           <script>
             var c1 = 0;
             var c2 = 0;
@@ -320,8 +482,8 @@
             document.querySelector(".progress-fill2").style.width =
               (c2 / 12) * 100 + "%";
             values = document.querySelectorAll(".values");
-            values[0].innerHTML = c1;
-            values[1].innerHTML = c2;
+            values[0].innerHTML = c1 + "/12";
+            values[1].innerHTML = c2 + "/12";
           </script>
 
           <div class="prediction">
@@ -362,8 +524,7 @@
           <div class="prediction flip">
             <div class="pcontent">
               <div class="cname">
-                <span class="material-icons-outlined">
-                  precision_manufacturing </span
+                <span class="material-icons-outlined"> query_stats </span
                 >{{data[1][0]}}
               </div>
               <div class="desc">
@@ -397,8 +558,7 @@
           <div class="prediction">
             <div class="pcontent">
               <div class="cname">
-                <span class="material-icons-outlined">
-                  precision_manufacturing </span
+                <span class="material-icons-outlined"> account_tree </span
                 >{{data[2][0]}}
               </div>
               <div class="desc">
@@ -432,8 +592,7 @@
           <div class="prediction flip">
             <div class="pcontent">
               <div class="cname">
-                <span class="material-icons-outlined">
-                  precision_manufacturing </span
+                <span class="material-icons-outlined"> account_tree </span
                 >{{data[3][0]}}
               </div>
               <div class="desc">
@@ -465,8 +624,7 @@
           <div class="prediction">
             <div class="pcontent">
               <div class="cname">
-                <span class="material-icons-outlined">
-                  precision_manufacturing </span
+                <span class="material-icons-outlined"> schema </span
                 >{{data[4][0]}}
               </div>
               <div class="desc">
@@ -532,8 +690,7 @@
           <div class="prediction">
             <div class="pcontent">
               <div class="cname">
-                <span class="material-icons-outlined">
-                  precision_manufacturing </span
+                <span class="material-icons-outlined"> grain </span
                 >{{data[6][0]}}
               </div>
               <div class="desc">
@@ -567,8 +724,7 @@
           <div class="prediction flip">
             <div class="pcontent">
               <div class="cname">
-                <span class="material-icons-outlined">
-                  precision_manufacturing </span
+                <span class="material-icons-outlined"> query_stats </span
                 >{{data[7][0]}}
               </div>
               <div class="desc">
@@ -603,9 +759,7 @@
           <div class="prediction flip">
             <div class="pcontent">
               <div class="cname">
-                <span class="material-icons-outlined">
-                  precision_manufacturing </span
-                >{{data[8][0]}}
+                <span class="material-icons-outlined"> lan </span>{{data[8][0]}}
               </div>
               <div class="desc">
                 An AdaBoost classifier is a meta-estimator that begins by
@@ -637,9 +791,7 @@
           <div class="prediction">
             <div class="pcontent">
               <div class="cname">
-                <span class="material-icons-outlined">
-                  precision_manufacturing </span
-                >{{data[9][0]}}
+                <span class="material-icons-outlined"> lan </span>{{data[9][0]}}
               </div>
               <div class="desc">
                 An AdaBoost classifier is a meta-estimator that begins by
@@ -739,5 +891,18 @@
         </div>
       </div>
     </div>
+    <script>
+      var pred = document.querySelectorAll(".prediction");
+      window.addEventListener("scroll", scrolling);
+      function scrolling() {
+        const trigger = window.innerHeight * (4.5 / 5);
+        pred.forEach((pre) => {
+          const predTop = pre.getBoundingClientRect().top;
+          if (predTop < trigger) {
+            pre.classList.add("show");
+          }
+        });
+      }
+    </script>
   </body>
 </html>

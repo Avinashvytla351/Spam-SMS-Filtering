@@ -33,7 +33,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
 import pickle
-sms = pd.read_csv('D:\IARE\Project\spam.csv',encoding='latin-1')
+sms = pd.read_csv('D:\IARE\Project\smsSpamDetection\spam.csv',encoding='latin-1')
 sms = sms.rename(columns={'v1':'label', 'v2':'text'})
 
 # removing  useless columns
