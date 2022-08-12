@@ -20,6 +20,10 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&family=Righteous&family=Roboto+Mono:wght@300;400;500;600&family=Roboto:wght@400;500;700&family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       html {
         scroll-behavior: smooth;
@@ -50,21 +54,53 @@
         width: 100%;
       }
       .header {
+        width: 100%;
         padding: 15px 0;
         background: white;
-        color: black;
+        color: rgb(110, 110, 110);
         text-align: center;
-        font-family: Righteous;
-        font-size: 30px;
+        font-family: "Plus Jakarta Sans";
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        justify-content: space-between;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        margin-bottom: 2px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+      }
+      .headp1 {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: fit-content;
+        font-size: 27px;
+      }
+      .headp2 .predict-button {
+        margin-top: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0px -4px 24px -1px rgba(0, 0, 0, 0.2);
+        margin-right: 20px;
+        background: white;
+        color: rgb(46, 116, 228);
+        border: 0.5mm solid rgb(46, 116, 228);
+        box-shadow: none;
+        padding: 7px 20px;
+      }
+      .headp2 .predict-button span {
+        font-size: 25px;
+        color: rgb(46, 116, 228);
+        margin: 0;
       }
       .header span {
         margin-right: 5px;
         font-size: 30px;
         color: rgb(66, 133, 244);
+        margin-top: 7px;
+        margin-left: 20px;
       }
       .body {
         width: 100%;
@@ -84,7 +120,7 @@
       .main .title {
         width: 550px;
         font-size: 35px;
-        font-family: poppins;
+        font-family: "Plus Jakarta Sans";
         color: white;
         text-align: center;
         font-weight: 500;
@@ -93,15 +129,16 @@
         width: 600px;
         height: 90px;
         font-size: medium;
-        font-family: poppins;
+        font-family: "Plus Jakarta Sans";
         outline: none;
         border: none;
         border-radius: 10mm;
         padding: 10px 20px;
-        background: rgba(255, 255, 255, 0.285);
+        background: rgba(255, 255, 255, 0.167);
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.037);
         resize: none;
         border-bottom-left-radius: 0mm;
+        font-weight: 500;
       }
       .main #message::placeholder {
         color: white;
@@ -118,7 +155,7 @@
       }
       .main button {
         font-size: large;
-        font-family: poppins;
+        font-family: "Plus Jakarta Sans";
         padding: 7px 20px;
         background: white;
         color: rgb(6, 101, 196);
@@ -155,7 +192,7 @@
         box-shadow: -1px 1px 7px rgba(0, 0, 0, 0.15);
         min-height: 230px;
         padding: 20px;
-        font-family: poppins;
+        font-family: "Plus Jakarta Sans";
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -177,7 +214,7 @@
       .cname {
         width: 100%;
         font-size: x-large;
-        font-weight: 500;
+        font-weight: 600;
         margin-bottom: 10px;
         display: flex;
         align-items: center;
@@ -195,6 +232,8 @@
       .pcontent {
         width: 100%;
         flex-basis: 55%;
+        font-weight: 400;
+        font-family: poppins;
       }
       .desc {
         font-size: medium;
@@ -229,7 +268,7 @@
         width: 100%;
         text-align: center;
         font-size: x-large;
-        font-family: poppins;
+        font-family: "Plus Jakarta Sans";
         font-weight: 400;
         margin-top: 30px;
         display: flex;
@@ -243,7 +282,7 @@
         align-items: flex-start;
         justify-content: space-evenly;
         flex-direction: column;
-        font-family: poppins;
+        font-family: "Plus Jakarta Sans";
         font-size: larger;
         background: white;
         padding: 10px;
@@ -308,7 +347,7 @@
       .label-top {
         font-size: 15px;
         font-weight: 600;
-        font-family: poppins;
+        font-family: "Plus Jakarta Sans";
         margin-bottom: 5px;
       }
       .data-set-accuracies {
@@ -342,6 +381,66 @@
       .block-title {
         font-weight: 400;
       }
+      .page-content {
+        width: 100%;
+        background: white;
+        font-family: "Plus Jakarta Sans";
+        height: 95vh;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        position: relative;
+      }
+      .page-cover {
+        margin: auto;
+        width: 80%;
+      }
+      .information {
+        width: 500px;
+      }
+      .page-title {
+        font-size: 55px;
+        font-weight: 500;
+        word-spacing: 5px;
+        letter-spacing: 1px;
+        color: rgb(57, 57, 57);
+        margin-bottom: 15px;
+      }
+      .page-title span {
+        color: rgb(255, 94, 94);
+      }
+      .main-content {
+        margin-top: 30px;
+        line-height: 26px;
+        color: rgb(74, 74, 74);
+        text-align: justify;
+        font-family: poppins;
+      }
+      .predict-button {
+        font-size: larger;
+        font-weight: 500;
+        background: rgb(66, 133, 244);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 1mm;
+        text-decoration: none;
+        display: block;
+        margin-top: 50px;
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+        letter-spacing: 1px;
+      }
+      .main-icon {
+        position: absolute;
+        right: 10px;
+        top: 20vh;
+        font-size: 400px;
+        color: rgb(81, 218, 133);
+        transform: rotateY(180deg) rotateZ(10deg);
+      }
       @media screen and (max-width: 800px) {
         .main #message {
           width: 85vw;
@@ -359,16 +458,57 @@
         .results1 {
           flex-wrap: wrap;
         }
+        .headp2 .predict-button {
+          font-size: medium;
+          padding: 5px 10px;
+        }
+        .headp1 {
+          font-size: large;
+        }
+        .main-icon {
+          display: none;
+        }
+        .information {
+          width: 100%;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="header">
+    <div class="header">
+      <div class="headp1">
         <span class="material-icons-round"> chat </span>SMS Spam Filter
       </div>
+      <div class="headp2">
+        <a href="#main" class="predict-button"
+          >Predict<span class="material-icons"> lightbulb </span></a
+        >
+      </div>
+    </div>
+    <div class="container">
       <div class="body">
-        <div class="main">
+        <div class="page-content">
+          <div class="page-cover">
+            <div class="information">
+              <div class="page-title"><span>Alert!</span> it's a spam SMS</div>
+              <div class="main-content">
+                SMS (Short Message Service) is considered to be one of the most
+                effective forms of communication. It is entirely based on
+                cellular communication systems which just require the cell phone
+                to be in the network coverage area to send or receive messages.
+              </div>
+              <a href="#main" class="predict-button"
+                >Predict<span class="material-icons-outlined">
+                  lightbulb
+                </span></a
+              >
+            </div>
+          </div>
+          <span class="material-icons-outlined main-icon">
+            perm_phone_msg
+          </span>
+        </div>
+        <div class="main" id="main">
           <div class="title">Check whether the message is</div>
           <div class="title" style="margin-bottom: 50px">Spam or Ham</div>
           <form action="{{url_for('home')}}" method="post">
