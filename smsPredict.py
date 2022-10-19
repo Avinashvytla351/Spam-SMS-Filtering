@@ -64,18 +64,7 @@ trainList=list(X_train)
 counter_vec = CountVectorizer().fit(X_train)
 X_train_vec, X_test_vec = counter_vec.transform(X_train), counter_vec.transform(X_test)
 
-classifiers = [['Neural Network :', MLPClassifier(max_iter = 2000)],
-               ['LogisticRegression :', LogisticRegression(max_iter = 1000)],
-               ['ExtraTreesClassifier :', ExtraTreesClassifier()],
-               ['DecisionTree :',DecisionTreeClassifier()],
-               ['RandomForest :',RandomForestClassifier()], 
-               ['Naive Bayes :', MultinomialNB()],
-               ['KNeighbours :', KNeighborsClassifier()],
-               ['SVM :', SVC()],
-               ['AdaBoostClassifier :', AdaBoostClassifier()],
-               ['GradientBoostingClassifier: ', GradientBoostingClassifier()],
-               ['XGB :', XGBClassifier()],
-               ['CatBoost :', CatBoostClassifier(logging_level='Silent')]]
+classifiers = [['Neural Network :', MLPClassifier(max_iter = 2000)]]
 
 predictions_df = pd.DataFrame()
 predictions_df['action'] = y_test

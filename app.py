@@ -27,16 +27,9 @@ def home():
     TestResult=[]
     c1=0
     c2=0
-    classifierList=["Neural Network","Logistic Regression","ExtraTrees Classifier","Decision Tree","RandomForest","Naive Bayes","K - Neighbours","Support Vector Machine","Ada Boost Classifier","Gradient Boosting Classifier","XGB","CatBoost"]
+    classifierList=["Neural Network"]
     j=0
     for i in predictResult:
-        if classifierList[j]=="Gradient Boosting Classifier":
-            TestResult.append((classifierList[j],1))
-            j=j+1
-            TestResult.append((classifierList[j],1))
-            j=j+1
-            TestResult.append((classifierList[j],1))
-            break
         predictions = i.predict(xv)
         TestResult.append((classifierList[j],predictions[0]))       
         j=j+1
